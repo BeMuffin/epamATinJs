@@ -1,0 +1,36 @@
+{
+  "name": "unittesting",
+  "version": "1.0.0",
+  "description": "simple unit test demo using mocha, jasmin and chai",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jasmine --config=\"./test/config/jasmine.config.json\"",
+    "coverage": "nyc npm run test"
+  },
+  "nyc": {
+    "all": true,
+    "include": [
+      "app/**/*.js"
+    ],
+    "excludes": [
+      "**/*.spec.js"
+    ],
+    "reporter": [
+      "html",
+      "text"
+    ]
+  },
+  "author": "Anna",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-spies": "^1.0.0",
+    "jasmine": "^3.10.0",
+    "mocha": "^9.1.3",
+    "mochawesome": "^7.0.1",
+    "nyc": "^15.1.0"
+  }
+}
