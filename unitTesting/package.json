@@ -7,13 +7,15 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha --config ./test/config/mocha.config.js"
+    "test": "jasmine --config=\"./test/config/jasmine.config.json\"",
+    "coverage": "nyc npm run test"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "chai": "^4.3.4",
     "chai-spies": "^1.0.0",
+    "jasmine": "^3.10.0",
     "mocha": "^9.1.3",
     "mochawesome": "^7.0.1",
     "nyc": "^15.1.0"
