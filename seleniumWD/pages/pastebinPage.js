@@ -119,6 +119,7 @@ class PastbinPage extends BasePage {
     const result = await this.waitNewPageLoaded(resultPageDiv, 20000);
     return result;
   }
+
   async sendKeysToPastForm(key) {
     const pasteFormId = this.pasteForm;
     const pasteForm = await this.driver.findElement(by.css(pasteFormId));

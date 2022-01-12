@@ -18,6 +18,7 @@ async function searchElement(keys) {
   await inputForm.sendKeys(keys);
   const keywords = await inputForm.getAttribute('value');
   await inputForm.sendKeys(webdriver.Key.ENTER);
+  await base.driver.sleep(3000);
   return keywords;
 }
 

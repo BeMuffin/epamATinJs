@@ -29,6 +29,15 @@ class BasePage {
     const frame = await driver.findElement(by.css(frameLocator));
     await driver.switchTo().frame(frame);
   }
+  async switchToExistWindow(windowName) {
+    return await driver.switchTo().window(windowName);
+  }
+  async switchToNewWindow(windowName) {
+    return await driver.switchTo().newWindow(windowName);
+  }
+  async getWindowHandle() {
+    return await driver.getWindowHandle();
+  }
   async clickOnElement(element) {
     await element.click();
   }
