@@ -1,9 +1,8 @@
-const service = require("./webdriver.config");
-let chrome = require("selenium-webdriver/chrome");
-const webdriver = require("selenium-webdriver");
+const service = require('./webdriver.config');
+let chrome = require('selenium-webdriver/chrome');
+const webdriver = require('selenium-webdriver');
 
 const Singleton = (function () {
-  // in loop
   const driver = new webdriver.Builder()
     .withCapabilities(webdriver.Capabilities.chrome())
     .build();

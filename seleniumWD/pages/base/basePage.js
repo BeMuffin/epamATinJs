@@ -1,4 +1,3 @@
-// const until = webdriver.until;
 const driver = require('./../../singleton');
 const webdriver = require('selenium-webdriver');
 const by = webdriver.By;
@@ -54,11 +53,8 @@ class BasePage {
     return await driver.findElement(by.className(locator));
   }
 
-  // async sleep(timeout) {
-  //   await driver.sleep(timeout);
-  // }
   async sendKeysToElement(locator, message) {
-    const element = await driver.findElement(by.css(locator)); // this.driver
+    const element = await driver.findElement(by.css(locator));
     await element.sendKeys(message);
     const text = await element.getAttribute('value');
     return text;

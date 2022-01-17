@@ -3,10 +3,9 @@ const chai = require('chai');
 const { expect } = require('chai');
 
 describe('E2E Pastbin page testing ', function () {
-  // let homePage;
   let homePage = new calculatorPage();
   let emailPage;
-  // before(async function () {});
+
   it('should load google cloud home page', async function () {
     const googleUrl = 'https://cloud.google.com/';
     await homePage.openPage(googleUrl);
@@ -23,13 +22,6 @@ describe('E2E Pastbin page testing ', function () {
       'https://cloud.google.com/products/calculator'
     );
   });
-  // it('should load calculator link ', async function () {
-  //   // const keywords = 'calculator';
-  //   const resultUrl = await homePage.searching();
-  //   await expect(resultUrl).to.equal(
-  //     'https://cloud.google.com/products/calculator'
-  //   );
-  // });
   it('should send key 4 to instanses field', async function () {
     const key = '4';
     const result = await homePage.sendKeyToInstansesFieldDiv(key);
@@ -86,7 +78,6 @@ describe('E2E Pastbin page testing ', function () {
   });
   it('should get email from emailLink', async function () {
     const home = homePage.getWindowHandle();
-    // await homePage.getEmailLetter();
     const email = await homePage.getEmailPage();
     emailPage = await homePage.getWindowHandle();
     const result = await homePage.inputEmailInField(home, email); // getting email
@@ -94,11 +85,10 @@ describe('E2E Pastbin page testing ', function () {
   });
   it('should get letter from email account', async function () {
     const result = await homePage.getLetter(emailPage);
-
     // await expect(result).to.equal(email);
   });
 
-  // after(async () => {
-  //   await homePage.quit();
-  // });
+  after(async () => {
+    await homePage.quit();
+  });
 });

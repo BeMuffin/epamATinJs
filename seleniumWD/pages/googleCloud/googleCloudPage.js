@@ -205,7 +205,7 @@ class googleCloudPage extends BasePage {
         )
       )
       .getText();
-    //'Total Estimated Cost: USD 2,538.40 per 1 month'
+
     return totalCost;
   }
 }
