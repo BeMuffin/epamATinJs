@@ -42,7 +42,7 @@ describe('E2E Pastbin page testing ', function () {
     const result = await homePage.selectMachinetype();
     await expect(result).to.equal('n1-standard-8 (vCPUs: 8, RAM: 30GB)');
   });
-  it('should get VM class item Preemptible from dropdown', async function () {
+  it('should get VM class item Regular from dropdown', async function () {
     const result = await homePage.selectVMtypeReg();
     await expect(result).to.equal('Regular');
   });
@@ -85,10 +85,10 @@ describe('E2E Pastbin page testing ', function () {
   });
   it('should get letter from email account', async function () {
     const result = await homePage.getLetter(emailPage);
-    // await expect(result).to.equal(email);
+    await expect(result).to.equal('Google Cloud Price Estimate');
   });
 
-  after(async () => {
-    await homePage.quit();
-  });
+  // after(async () => {
+  //   await homePage.quit();
+  // });
 });

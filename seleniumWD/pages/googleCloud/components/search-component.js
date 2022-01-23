@@ -11,14 +11,11 @@ async function searchElement(keys) {
   await base.moveToElement(searchForm);
   await searchForm.click();
   const inputForm = await base.driver.findElement(
-    by.css(
-      'body > section > devsite-header > div > div.devsite-top-logo-row-wrapper-wrapper > div > div > div.devsite-top-logo-row-middle > devsite-search > form > div.devsite-search-container > div > input'
-    )
+    by.css('.devsite-search-field')
   );
   await inputForm.sendKeys(keys);
   const keywords = await inputForm.getAttribute('value');
   await inputForm.sendKeys(webdriver.Key.ENTER);
-  await base.driver.sleep(3000);
   return keywords;
 }
 

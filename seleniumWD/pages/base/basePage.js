@@ -21,11 +21,10 @@ class BasePage {
     return url;
   }
   async moveToElement(element) {
-    const action = driver.actions({ async: true });
-    await action.move({ origin: element }).pause(1000).perform();
+    const action = await driver.actions({ async: true });
+    await action.move({ origin: element }).pause(3000).perform();
   }
-  async switchToFrame(frameLocator) {
-    const frame = await driver.findElement(by.css(frameLocator));
+  async switchToFrame(frame) {
     await driver.switchTo().frame(frame);
   }
   async switchToExistWindow(windowName) {
@@ -53,8 +52,7 @@ class BasePage {
     return await driver.findElement(by.className(locator));
   }
 
-  async sendKeysToElement(locator, message) {
-    const element = await driver.findElement(by.css(locator));
+  async sendKeysToElement(element, message) {
     await element.sendKeys(message);
     const text = await element.getAttribute('value');
     return text;
@@ -68,11 +66,9 @@ class BasePage {
   async waitNewPageLoaded(newPageElementLocator, timeout) {
     let result;
     await driver
-      .wait(until.elementLocated(by.css(newPageElementLocator)), timeout)
+      .wait(until.elementLocated(newPageElementLocator), timeout)
       .then(async function () {
-        result = await driver
-          .findElement(by.css(newPageElementLocator))
-          .isDisplayed();
+        result = await driver.findElement(newPageElementLocator).isDisplayed();
       });
     return result;
   }

@@ -1,58 +1,44 @@
 const BasePage = require('../base/basePage');
 const webdriver = require('selenium-webdriver');
-const chrome = require('selenium-webdriver/chrome');
-const search = require('./components/search-component');
 const by = webdriver.By;
 const until = webdriver.until;
 
 class MailPage extends BasePage {
   constructor() {
     super();
-    this.emailLink = '#listeliens > a:nth-child(1)';
-    this.email = '#egen';
+    this.createEmailLink = by.css('#listeliens [href="email-generator"]');
+    this.email = by.css('#egen');
     this.pageId = this.getWindowHandle();
-    this.emailFrame = '#ifmail';
-    this.emailLetter =
-      'body > header > div:nth-child(3) > div.ellipsis.nw.b.f18';
-    this.getEmailButton =
-      'body > div > div.ymaincenter > main > div > div.pagecdr.brounded > div > div > div.nw > button:nth-child(3)';
-    this.emailDiv = '#e_ZwVjZGRlZGD0ZQN4ZQNjAQZ0ZGx1BD==';
-    this.refreshBtn = '#refresh';
-    this.emailsListFrame = '#ifinbox';
+    this.emailFrame = by.css('#ifmail');
+    this.emailLetter = by.css('div.ellipsis');
+    this.getEmailButton = by.css('.tooltip +button');
+    this.emailDiv = by.css('div.m');
+    this.refreshBtn = by.css('#refresh');
+    this.emailsListFrame = by.css('#ifinbox');
+    this.emailCounter = by.css('#nbmail');
+    this.footer = by.css('footer');
   }
   async getEmail() {
     await this.openPage('https://yopmail.com/');
-    await this.driver.findElement(by.css(this.emailLink)).click();
-    const email = await this.driver.findElement(by.css(this.email)).getText();
+    await this.driver.findElement(this.createEmailLink).click();
+    const email = await this.driver.findElement(this.email).getText();
     return email;
   }
   async getLetter() {
-    const scroll = await this.driver.findElement(
-      by.css('body > div > div.ymaincenter > footer')
-    );
+    const scroll = await this.driver.findElement(this.footer);
     await this.moveToElement(scroll);
-    await this.driver.findElement(by.css(this.getEmailButton)).click();
-    // const eFrame = await this.driver.findElement(by.css(this.emailFrame));
-
-    const refresh = await this.driver.findElement(by.css(this.refreshBtn));
-    // await this.switchToFrame(this.emailsListFrame);
-    let emailDiv = await this.driver.findElement(
-      by.css(
-        '#webmail > div.webmaillogo > div > main > div.wmmain > div.wmleft > div > div.wminboxheader > div:nth-child(5)'
-      )
-    );
+    await this.driver.findElement(this.getEmailButton).click();
+    await this.driver.sleep(2000);
+    const refresh = await this.driver.findElement(this.refreshBtn);
+    let emailDiv = await this.driver.findElement(this.emailCounter);
     await emailDiv.getText();
     do {
       await refresh.click();
       emailDiv = await emailDiv.getText();
-    } while (emailDiv != '1 mail');
-    // await this.driver.findElement(by.css(this.emailDiv)).click();
-    // await this.driver.wait(until.elementLocated(this.emailDiv).);
-    // await this.waitNewPageLoaded(this.emailLetter, 5000);
-    await this.switchToFrame(this.emailFrame);
-    const letter = await this.driver
-      .findElement(by.css(this.emailLetter))
-      .getText();
+    } while (emailDiv === '0 mail');
+    const emailFrame = await this.driver.findElement(this.emailFrame);
+    await this.switchToFrame(emailFrame);
+    const letter = await this.driver.findElement(this.emailLetter).getText();
     return letter;
   }
 }
