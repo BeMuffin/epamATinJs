@@ -1,7 +1,7 @@
 const BasePage = require('../base/basePage');
 const webdriver = require('selenium-webdriver');
 const by = webdriver.By;
-const until = webdriver.until;
+const { waitElemLocated } = require('./helper/waiters');
 
 class MailPage extends BasePage {
   constructor() {
@@ -28,8 +28,7 @@ class MailPage extends BasePage {
     const scroll = await this.driver.findElement(this.footer);
     await this.moveToElement(scroll);
     await this.driver.findElement(this.getEmailButton).click();
-    await this.driver.sleep(2000);
-    const refresh = await this.driver.findElement(this.refreshBtn);
+    const refresh = await waitElemLocated(this.refreshBtn);
     let emailDiv = await this.driver.findElement(this.emailCounter);
     await emailDiv.getText();
     do {

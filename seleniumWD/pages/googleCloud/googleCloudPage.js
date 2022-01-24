@@ -1,10 +1,9 @@
 const BasePage = require('../base/basePage');
 const webdriver = require('selenium-webdriver');
-const chrome = require('selenium-webdriver/chrome');
 const search = require('./components/search-component');
 const by = webdriver.By;
-const until = webdriver.until;
 const mailPage = require('./mailPage');
+const { waitElemLocated } = require('./helper/waiters');
 
 class googleCloudPage extends BasePage {
   constructor() {
@@ -111,9 +110,7 @@ class googleCloudPage extends BasePage {
   }
 
   async searching() {
-    await this.driver.sleep(10000);
-    await this.findElement(this.calculatorLink).click();
-    await this.driver.sleep(1000);
+    await (await waitElemLocated(this.calculatorLink)).click();
     const calculatorUrl = await this.getPageUrl();
     return calculatorUrl;
   }
@@ -128,88 +125,74 @@ class googleCloudPage extends BasePage {
     const resultKey = await instansesField.getAttribute('value');
     return resultKey;
   }
-  async waitCalculatorLink() {
-    await this.driver.wait(until.elementLocated());
-  }
   async getOperatingSystemElement() {
-    const OSlist = await this.findElement(this.operatingSystemList).click();
-    await this.driver.sleep(1000);
+    await (await waitElemLocated(this.operatingSystemList)).click();
     await this.findElement(this.listElement).click();
     const osText = await this.findElement(this.OSTextSpan).getText();
     return osText;
   }
   async selectVMtypePreemp() {
-    await this.findElement(this.VMClassList).click();
-    await this.driver.sleep(1000);
-    await this.findElement(this.VMClassPreemptible).click();
+    await (await waitElemLocated(this.VMClassList)).click();
+    await (await waitElemLocated(this.VMClassPreemptible)).click();
     const resultItem = await this.findElement(this.VMTextSpan).getText();
     return resultItem;
   }
   async selectVMtypeReg() {
-    await this.findElement(this.VMClassList).click();
-    await this.driver.sleep(1000);
-    await this.findElement(this.VMClassRegular).click();
+    await (await waitElemLocated(this.VMClassList)).click();
+    await (await waitElemLocated(this.VMClassRegular)).click();
     const resultItem = this.findElement(this.VMTextSpan).getText();
     return resultItem;
   }
   async selectMachinetype() {
-    await this.findElement(this.machineTypeList).click();
-    await this.driver.sleep(1000);
-    await this.findElement(this.machineTypeListElem).click();
+    await (await waitElemLocated(this.machineTypeList)).click();
+    await (await waitElemLocated(this.machineTypeListElem)).click();
     const resultItem = await this.findElement(this.machineTextSpan).getText();
     return resultItem;
   }
   async onGPUCheckbox() {
     let resultStatus;
-    const checkbox = await this.findElement(this.addGPUCheckbox);
+    const checkbox = await waitElemLocated(this.addGPUCheckbox);
     await checkbox.click().then(async function () {
       resultStatus = await checkbox.getAttribute('aria-checked');
     });
     return resultStatus;
   }
   async selectGPUType() {
-    await this.findElement(this.gpuType).click();
-    await this.driver.sleep(2000);
-    await this.findElement(this.gpuElement).click();
+    await (await waitElemLocated(this.gpuType)).click();
+    await (await waitElemLocated(this.gpuElement)).click();
     return await this.findElement(this.selectedType).getText();
   }
   async selectGPUNumber() {
-    await this.findElement(this.gpuNumberList).click();
-    await this.driver.sleep(2000);
-    await this.findElement(this.gpuNumberElement).click();
+    await (await waitElemLocated(this.gpuNumberList)).click();
+    await (await waitElemLocated(this.gpuNumberElement)).click();
     const selectedNumber = await this.findElement(
       this.selectedNumber
     ).getText();
     return selectedNumber;
   }
   async selectLocalSSDType() {
-    await this.findElement(this.ssdList).click();
-    await this.driver.sleep(2000);
-    await this.findElement(this.ssdType).click();
+    await (await waitElemLocated(this.ssdList)).click();
+    await (await waitElemLocated(this.ssdType)).click();
     const selectedSSD = await this.findElement(this.selectedSSD).getText();
     return selectedSSD;
   }
-
   async selectLocation() {
-    await this.findElement(this.location).click();
-    await this.driver.sleep(2000);
-    await this.findElement(this.country).click();
+    await (await waitElemLocated(this.location)).click();
+    await (await waitElemLocated(this.country)).click();
     const selectedLocation = await this.findElement(
       this.selectedLocation
     ).getText();
     return selectedLocation;
   }
   async selectCommittedUsage() {
-    await this.findElement(this.committedUsageList).click();
-    await this.driver.sleep(2000);
-    await this.findElement(this.committedUsageListEl).click();
+    await (await waitElemLocated(this.committedUsageList)).click();
+    await (await waitElemLocated(this.committedUsageListEl)).click();
     const selectedElement = this.findElement(this.committedUsageSpan).getText();
     return selectedElement;
   }
   async addToExstimateBtnClick() {
-    await this.findElement(this.resultButton).click();
-    await this.driver.sleep(2000);
-    const totalCost = await this.findElement(this.totalCost).getText();
+    await (await waitElemLocated(this.resultButton)).click();
+    const totalCost = await (await waitElemLocated(this.totalCost)).getText();
     return totalCost;
   }
 }

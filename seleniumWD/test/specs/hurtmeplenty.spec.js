@@ -70,7 +70,7 @@ describe('E2E Pastbin page testing ', function () {
     const result = await homePage.selectCommittedUsage();
     await expect(result).to.equal('1 Year');
   });
-  it('should should click on add to estimate button ', async function () {
+  it('should get total cost after clicked on estimate button ', async function () {
     const result = await homePage.addToExstimateBtnClick();
     await expect(result).to.equal(
       'Total Estimated Cost: USD 4,801.42 per 1 month'
@@ -80,7 +80,7 @@ describe('E2E Pastbin page testing ', function () {
     const home = homePage.getWindowHandle();
     const email = await homePage.getEmailPage();
     emailPage = await homePage.getWindowHandle();
-    const result = await homePage.inputEmailInField(home, email); // getting email
+    const result = await homePage.inputEmailInField(home, email);
     await expect(result).to.equal(email);
   });
   it('should get letter from email account', async function () {
@@ -88,7 +88,7 @@ describe('E2E Pastbin page testing ', function () {
     await expect(result).to.equal('Google Cloud Price Estimate');
   });
 
-  // after(async () => {
-  //   await homePage.quit();
-  // });
+  after(async () => {
+    await homePage.quit();
+  });
 });
