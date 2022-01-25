@@ -1,5 +1,7 @@
 const Page = require('./Page');
 const search = require('./components/search-component');
+const { waitElemLocated } = require('../helper/waiters');
+const MailPage = require('./mailPage');
 
 class CloudPage extends Page {
   get searchForm() {
@@ -9,99 +11,127 @@ class CloudPage extends Page {
     return $('=Google Cloud Pricing Calculator');
   }
   get iframe1() {
-    return '#cloud-site > devsite-iframe > iframe';
+    return $('.devsite-article-body iframe');
   }
   get calculatorFrame() {
-    return $('myFrame');
+    return $('.cp-header iframe');
   }
   get instansesField() {
-    return $('#input_75');
+    return $('[name="ComputeEngineForm"] .ng-invalid-required');
   }
   get OSList() {
-    return $('#select_value_label_67');
+    return $('[name=ComputeEngineForm] md-select-value:first-of-type');
   }
   get OSElement() {
-    return $('#select_option_77');
+    return $('md-option[value="free"]');
   }
   get OSTextField() {
-    return $('#select_value_label_67 > span:nth-child(1)');
+    return $('.ng-not-empty span');
   }
   get VMClassList() {
-    return $('#select_value_label_68');
+    return $('md-select[placeholder ="VM Class"]');
   }
   get VMClassRegular() {
-    return $('#select_option_90');
+    return $('.md-clickable [value="regular"]');
   }
   get VMClassPreemptible() {
-    return $('#select_option_91');
+    return $('.md-clickable [value="preemptible"]');
   }
   get VMClassTextField() {
-    return $('#select_value_label_68 > span:nth-child(1)');
+    return $('[placeholder="VM Class"] span:first-of-type');
   }
   get machineTypeList() {
-    return $('#select_value_label_71');
+    return $('[placeholder="Instance type"] md-select-value');
   }
   get machineTypeElement() {
-    return $('#select_option_418');
+    return $('md-option[value="CP-COMPUTEENGINE-VMIMAGE-N1-STANDARD-8"');
   }
   get machineTypeTextField() {
-    return $('#select_value_label_71 > span:nth-child(1)');
+    return $('[placeholder="Instance type"] span:first-of-type');
   }
   get gpuCheckbox() {
-    return $(
-      '#mainForm > div:nth-child(3) > div > md-card > md-card-content > div > div:nth-child(1) > form > div:nth-child(13) > div.layout-column.flex-gt-sm-90.flex-80 > md-input-container > md-checkbox'
-    );
+    return $('[name="ComputeEngineForm"] [aria-label="Add GPUs"]');
   }
   get gpuTypeList() {
-    return $('#select_451');
+    return $('[placeholder="GPU type"]');
   }
   get gpuTypeElement() {
-    return $('#select_option_458');
+    return $('[value="NVIDIA_TESLA_V100"]');
   }
   get gpuTypeTextField() {
-    return $(
-      '/html/body/md-content/md-card/div/md-card-content[1]/div[2]/div/md-card/md-card-content/div/div[1]/form/div[12]/div/div[1]/div[1]/md-input-container[1]/md-select/md-select-value'
-    );
+    return $('[placeholder="GPU type"] span:first-of-type');
   }
   get gpuNumberList() {
-    return $('#select_value_label_450');
+    return $('[placeholder="Number of GPUs"] .md-select-value');
   }
   get gpuNumberElement() {
-    return $('#select_option_462');
+    return $('div.md-clickable md-option[value="1"]');
   }
   get gpuNumberTextField() {
-    return $('#select_value_label_450 > span:nth-child(1)');
+    return $('[placeholder="Number of GPUs"] span:first-of-type');
   }
   get ssdTypeList() {
-    return $('#select_value_label_412');
+    return $(
+      '[name = "ComputeEngineForm"] [placeholder="Local SSD"] md-select-value'
+    );
   }
   get ssdType() {
-    return $('#select_option_439');
+    return $('div.md-clickable [value="2"]');
   }
   get selectedSsdType() {
-    return $('#select_value_label_412 > span:nth-child(1)');
+    return $(
+      '[name=ComputeEngineForm] [placeholder="Local SSD"] span:first-of-type'
+    );
   }
   get locationList() {
-    return $('#select_value_label_73');
+    return $(
+      '[name="ComputeEngineForm"] [placeholder = "Datacenter location"] md-select-value'
+    );
   }
   get carolinaCountry() {
-    return $('#select_option_228');
+    return $('div.md-clickable [value="us-east1"]');
   }
   get selectedLocation() {
-    return $('#select_value_label_73 > span:nth-child(1)');
+    return $(
+      '[name=ComputeEngineForm] [placeholder="Datacenter location"] span:first-of-type'
+    );
   }
   get committedUsageList() {
-    return $('#select_115');
+    return $('[name="ComputeEngineForm"] [placeholder="Committed usage"]');
   }
   get committedUsageElement() {
-    return $('#select_option_113');
+    return $('div.md-clickable [value="1"]');
   }
   get selectedCommitedUsageEl() {
-    return $('#select_value_label_74 > span:nth-child(1)');
+    return $(
+      '[name="ComputeEngineForm"] [placeholder="Committed usage"]  span:first-of-type'
+    );
   }
-
+  get addToEstimateBtn() {
+    return $('[name="ComputeEngineForm"] button.cpc-button');
+  }
+  get emailEstimateBtn() {
+    return $('#email_quote');
+  }
+  get emailForm() {
+    return $('[name="emailForm"]');
+  }
+  get emailField() {
+    return $('input[name="description"].ng-valid-email');
+  }
+  get sendEmailBtn() {
+    return $('button[aria-label="Send Email"]');
+  }
+  get totalCost() {
+    return $('.md-title>b');
+  }
   async open() {
     await super.open('https://cloud.google.com/');
+  }
+  async getMail() {}
+
+  async clickOnElem(element) {
+    await (await waitElemLocated(element)).click();
   }
 
   async getSearchKeyswords() {
@@ -109,21 +139,18 @@ class CloudPage extends Page {
     return resultKeyword;
   }
   async openCalculatorPage() {
-    const calculatorLink = await this.calculatorLink;
-    await calculatorLink.click();
+    await this.clickOnElem(this.calculatorLink);
   }
   async getAccessToElements() {
-    const iframe1 = await browser.$(
-      '//*[@id="cloud-site"]/devsite-iframe/iframe'
-    );
+    const iframe1 = await waitElemLocated(this.iframe1);
     await browser.switchToFrame(iframe1);
-    const iframe2 = await browser.$('#myFrame');
+    const iframe2 = await waitElemLocated(this.calculatorFrame);
     await browser.switchToFrame(iframe2);
   }
   async inputInInstansesField(key) {
     await this.maximizeWindow();
     await this.getAccessToElements();
-    const instansesField = await this.instansesField;
+    const instansesField = await waitElemLocated(this.instansesField);
     await instansesField.addValue(key);
     const resultKey = await instansesField.getValue();
     return resultKey;
@@ -132,110 +159,74 @@ class CloudPage extends Page {
     await browser.maximizeWindow();
   }
   async chooseOperatingSystem() {
-    await this.OSList.click();
-    await this.OSElement.click();
+    await this.clickOnElem(this.OSList);
+    await this.clickOnElem(this.OSElement);
     return await this.OSTextField.getText();
   }
   async chooseVMClassPreemptible() {
-    await this.VMClassList.click();
-    await this.VMClassPreemptible.click();
+    await this.clickOnElem(this.VMClassList);
+    await this.clickOnElem(this.VMClassPreemptible);
     return await this.VMClassTextField.getText();
   }
   async chooseMachineType() {
-    await this.machineTypeList.click();
-    await this.machineTypeElement.click();
+    await this.clickOnElem(this.machineTypeList);
+    await this.clickOnElem(this.machineTypeElement);
     return await this.machineTypeTextField.getText();
   }
   async chooseVMClassRegular() {
-    await this.VMClassList.click();
-    await this.VMClassRegular.click();
+    await this.clickOnElem(this.VMClassList);
+    await this.clickOnElem(this.VMClassRegular);
     await this.chooseMachineType();
   }
   async addGPU() {
-    await this.gpuCheckbox.click();
-    await this.gpuTypeList.click();
+    await this.clickOnElem(this.gpuCheckbox);
+    await this.clickOnElem(this.gpuTypeList);
+    await this.clickOnElem(this.gpuTypeElement);
     const gpuTypeTextField = await this.gpuTypeTextField;
-    const gpuTypeElement = await this.gpuTypeElement;
-    await gpuTypeTextField.waitUntil(
-      async function () {
-        await gpuTypeElement.click();
-        return (await gpuTypeTextField.getText()) === 'NVIDIA Tesla V100';
-      },
-      {
-        timeout: 5000,
-        timeoutMsg: 'expected text to be different after 5s',
-      }
-    );
-
-    return await this.gpuTypeTextField.getText();
+    return await gpuTypeTextField.getText();
   }
   async chooseGPUNumber() {
-    await this.gpuNumberList.click();
-    const gpuNumberElement = await this.gpuNumberElement;
+    await this.clickOnElem(this.gpuNumberList);
+    await this.clickOnElem(this.gpuNumberElement);
     const gpuNumberTextField = await this.gpuNumberTextField;
-    await gpuNumberTextField.waitUntil(
-      async function () {
-        await gpuNumberElement.click();
-        return (await gpuNumberTextField.getText()) === '1';
-      },
-      {
-        timeout: 5000,
-        timeoutMsg: 'expected text to be different after 5s',
-      }
-    );
-    return await this.gpuNumberTextField.getText();
+    return await gpuNumberTextField.getText();
   }
   async chooseSSDType() {
-    await this.ssdTypeList.click();
+    await this.clickOnElem(this.ssdTypeList);
+    await this.clickOnElem(this.ssdType);
     const selectedSsdType = await this.selectedSsdType;
-    const ssdType = await this.ssdType;
-    await selectedSsdType.waitUntil(
-      async function () {
-        await ssdType.click();
-        return (await selectedSsdType.getText()) === '2x375 GB';
-      },
-      {
-        timeout: 5000,
-        timeoutMsg: 'expected text to be different after 5s',
-      }
-    );
-    return await this.selectedSsdType.getText();
+    const result = await selectedSsdType.getText();
+    return result;
   }
   async chooseLocation() {
-    await this.locationList.click();
-    const country = await this.carolinaCountry;
+    await this.clickOnElem(this.locationList);
+    await this.clickOnElem(this.carolinaCountry);
     const selectedLocation = await this.selectedLocation;
-    await selectedLocation.waitUntil(
-      async function () {
-        await country.click();
-        return (
-          (await selectedLocation.getText()) === 'South Carolina (us-east1)'
-        );
-      },
-      {
-        timeout: 5000,
-        timeoutMsg: 'expected text to be different after 5s',
-      }
-    );
-
-    return await this.selectedLocation.getText();
+    return await selectedLocation.getText();
   }
   async chooseComitedUsage() {
-    await this.committedUsageList.click();
-    const committedUsage = this.committedUsageElement;
+    await this.clickOnElem(this.committedUsageList);
+    await this.clickOnElem(this.committedUsageElement);
     const selectedCommitedUsage = this.selectedCommitedUsageEl;
-    await selectedCommitedUsage.waitUntil(
-      async function () {
-        await committedUsage.click();
-        return (await selectedCommitedUsage.getText()) === '1 Year';
-      },
-      {
-        timeout: 5000,
-        timeoutMsg: 'expected text to be different after 5s',
-      }
-    );
-
-    return await this.selectedCommitedUsageEl.getText();
+    return await selectedCommitedUsage.getText();
+  }
+  async addToExstimateBtnClick() {
+    await this.clickOnElem(this.addToEstimateBtn);
+    const totalCost = await waitElemLocated(this.totalCost);
+    return await totalCost.getText();
+  }
+  async sendEmailToForm(email) {
+    await browser.switchWindow('cloud.google.com');
+    await this.getAccessToElements();
+    await this.clickOnElem(this.emailEstimateBtn);
+    const emailField = await waitElemLocated(this.emailField);
+    await emailField.addValue(email);
+    const resultEmail = await emailField.getValue();
+    return resultEmail;
+  }
+  async sendLetterToEmail() {
+    await this.clickOnElem(this.sendEmailBtn);
+    await browser.switchWindow('yopmail.com');
   }
 }
 module.exports = new CloudPage();

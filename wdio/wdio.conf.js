@@ -1,5 +1,5 @@
 exports.config = {
-  specs: ['./test/specs/hardcore.spec.js'],
+  specs: ['./test/specs/icanwin.spec.js'],
   exclude: [
     // 'path/to/excluded/files'
   ],

@@ -1,9 +1,7 @@
 const GoogleCloud = require('./../pages/cloudPage');
-const chai = require('chai');
-// const { expect } = require('chai');
+const MailPage = require('../pages/mailPage');
 
 describe('E2E pricing calculator page testing ', function () {
-  // before(async function () {});
   it('should load google cloud default page', async function () {
     await GoogleCloud.open();
     await expect(browser).toHaveUrl('https://cloud.google.com/');
@@ -56,5 +54,21 @@ describe('E2E pricing calculator page testing ', function () {
   it('should select committed usage year from committed usage list ', async function () {
     const result = await GoogleCloud.chooseComitedUsage();
     await expect(result).toEqual('1 Year');
+  });
+  it('should get total cost after clicked on estimate button ', async function () {
+    const result = await GoogleCloud.addToExstimateBtnClick();
+    await expect(result).toEqual(
+      'Total Estimated Cost: USD 5,413.06 per 1 month'
+    );
+  });
+  it('should get email from emailLink', async function () {
+    const email = await MailPage.getEmail();
+    const resultEmail = await GoogleCloud.sendEmailToForm(email);
+    await GoogleCloud.sendLetterToEmail();
+    await expect(resultEmail).toEqual(email);
+  });
+  it('should get letter from email account', async function () {
+    const result = await MailPage.getLetter();
+    await expect(result).toEqual('Google Cloud Price Estimate');
   });
 });
