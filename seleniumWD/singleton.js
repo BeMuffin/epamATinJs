@@ -1,5 +1,3 @@
-const service = require('./webdriver.config');
-let chrome = require('selenium-webdriver/chrome');
 const webdriver = require('selenium-webdriver');
 
 const Singleton = (function () {

@@ -11,8 +11,8 @@ class googleCloudPage extends BasePage {
     this.mailPage = new mailPage();
     this.calculatorLink = by.linkText('Google Cloud Pricing Calculator');
     this.iframe1 = by.css('.devsite-article-body iframe');
-    this.iframe2Id = by.css('.cp-header iframe');
-    this.instansesFieldId = by.css(
+    this.iframe2 = by.css('.cp-header iframe');
+    this.instansesField = by.css(
       '[name="ComputeEngineForm"] .ng-invalid-required'
     );
     this.operatingSystemList = by.css(
@@ -116,11 +116,11 @@ class googleCloudPage extends BasePage {
   }
   async getAccessTocalculatorForm() {
     await this.switchToFrame(this.findElement(this.iframe1));
-    await this.switchToFrame(this.findElement(this.iframe2Id));
+    await this.switchToFrame(this.findElement(this.iframe2));
   }
   async sendKeyToInstansesFieldDiv(keys) {
     await this.getAccessTocalculatorForm();
-    const instansesField = await this.findElement(this.instansesFieldId);
+    const instansesField = await this.findElement(this.instansesField);
     await instansesField.sendKeys(keys);
     const resultKey = await instansesField.getAttribute('value');
     return resultKey;
