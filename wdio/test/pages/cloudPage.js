@@ -1,7 +1,6 @@
 const Page = require('./Page');
 const search = require('./components/search-component');
 const { waitElemLocated } = require('../helper/waiters');
-const MailPage = require('./mailPage');
 
 class CloudPage extends Page {
   get searchForm() {

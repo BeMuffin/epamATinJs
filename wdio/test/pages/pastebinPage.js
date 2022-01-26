@@ -1,11 +1,14 @@
 const BasePage = require('./Page');
-const { waitElemLocated } = require('../helper/waiters');
+const { waitElemLocated, waitUntilClickable } = require('../helper/waiters');
 class PastbinPage extends BasePage {
   get pasteForm() {
     return $('.textarea');
   }
   get pasteTitle() {
     return $('.field-postform-name label');
+  }
+  get switchDiv() {
+    return $('.toggle');
   }
   get pasteExpDiv() {
     return $('.field-postform-expiration');
@@ -33,8 +36,8 @@ class PastbinPage extends BasePage {
   get footerByClass() {
     return $('.top-footer');
   }
-  get resultPageDiv() {
-    return $('.content__title ');
+  get resultPageText() {
+    return $('.info-bar h1 ');
   }
   get settingsDiv() {
     return $('.-paste');
@@ -60,8 +63,13 @@ class PastbinPage extends BasePage {
   async open() {
     await super.open('https://pastebin.com/');
   }
+  async windowMaximize() {
+    await browser.maximizeWindow();
+  }
   async clickOnElem(element) {
-    await (await waitElemLocated(element)).click();
+    await waitElemLocated(element);
+    await waitUntilClickable(element);
+    await element.click();
   }
   async sendKeysToPastForm(key) {
     const pasteForm = await waitElemLocated(this.pasteForm);
@@ -71,7 +79,7 @@ class PastbinPage extends BasePage {
   }
 
   async getPasteExpElem(elNumber) {
-    const scroll = await waitElemLocated(this.pasteExpDiv);
+    const scroll = await waitElemLocated(this.settingsDiv);
     await scroll.scrollIntoView();
     await this.clickOnElem(this.pasteExpDropDown);
     await this.clickOnElem(this.pasteExpElem(elNumber));
@@ -84,16 +92,19 @@ class PastbinPage extends BasePage {
     await this.clickOnElem(this.newPasteBtn);
   }
   async checkNewPageLoaded() {
-    await waitElemLocated(this.resultPageDiv);
+    const pasteData = await waitElemLocated(this.resultPageText);
+    return await pasteData.getText();
   }
   async sendKeysToTittleField(message) {
     const titleField = await waitElemLocated(this.pasteTitleField);
-    const textResult = await titleField.addValue(message);
+    await titleField.addValue(message);
+    const textResult = await titleField.getValue();
     return textResult;
   }
   async getSyntaxHighlighDropDownEl(elNumber) {
     const scroll = await waitElemLocated(this.pasteTitle);
     await scroll.scrollIntoView();
+    await waitUntilClickable(this.dropdownSyntaxHighlight);
     await this.clickOnElem(this.dropdownSyntaxHighlight);
     await this.clickOnElem(this.dropdownSyntaxHighlightEl(elNumber));
     return await this.syntaxHighlightingElText.getText();
@@ -106,8 +117,8 @@ class PastbinPage extends BasePage {
     return await newPasteDiv.getAttribute('data-language');
   }
   async switchHightlightSwitcher() {
-    const scroll = await waitElemLocated(this.settingsDiv);
-    await scroll.scrollIntoView();
+    const scroll = await waitElemLocated(this.switchDiv);
+    await scroll.scrollIntoView();    
     await this.clickOnElem(this.hightlightSwitch);
     const newPaste = await waitElemLocated(this.pasteTextArea);
     const style = await newPaste.getAttribute('style');

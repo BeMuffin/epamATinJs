@@ -1,8 +1,4 @@
-const {
-  waitElemLocated,
-  waitUntilGetValue,
-  waitUntilAddValue,
-} = require('../../helper/waiters');
+const { waitElemLocated } = require('../../helper/waiters');
 const searchForm = '.devsite-search-form';
 const searchField = '.devsite-search-field';
 
